@@ -23,17 +23,17 @@ while getopts "i:f:v:h" option; do
 			;;
 		h)
 			help
-			exit 0
+			exit
 			;;
 		:)
 			echo "Error: -${OPTARG} requires an argument"
 			help
-			exit 0
+			exit
 			;;
 		\?)
 			echo 'Error: Invalid option'
 			help
-			exit 0
+			exit
 			;;
 	esac
 done
@@ -45,16 +45,14 @@ function get_op_values() {
 function set_vars() {
 	get_op_values || {
 		echo 'failed to get values from 1password'
-		exit 0
+		exit
 	}
-	
-	IFS=','
 
-	read -a strarr <<< "$op_str"
+	read -a op_arr <<< "$op_str"
 
-	host=${strarr[0]}
-	user=${strarr[1]}
-	db=${strarr[2]}
+	host=${op_arr[0]}
+	user=${op_arr[1]}
+	db=${op_arr[2]}
 }
 
 # if you don't want to enter a vault name every time, you can 
@@ -68,7 +66,7 @@ if [ -z ${i} ]
 then
 	echo 'Error: Expected argument for -i'
 	help
-	exit 0
+	exit
 else
 	set_vars
 fi
@@ -77,11 +75,11 @@ if [ -z ${f} ]
 then
 	echo 'Error: Expected argument for -f'
 	help
-	exit 0
+	exit
 elif [ ! -f $f ];
 then
 	echo 'Error: File does not exist'
-	exit 0
+	exit
 fi
 
 echo
